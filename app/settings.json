@@ -1,0 +1,9 @@
+{
+    "appname" : "myapp",
+    "appport" : "0",
+    "mode" : "window",
+    "window" : {
+        "width" : "500",
+        "height" : "150"
+    }
+}
