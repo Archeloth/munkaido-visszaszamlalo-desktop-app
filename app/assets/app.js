@@ -22,17 +22,43 @@
 
 let myapp = {
     myfunction : function () {
+        //static features
+
         let d = new Date();
-        document.getElementById('date').innerText = "Mai dátum: " + d.toISOString().split('T')[0];
+        document.getElementById('date').innerText = "Mai dátum: " + d.toLocaleDateString();
+
+        let request = new XMLHttpRequest();
+        request.open("GET", "https://api.sunrise-sunset.org/json?lat=47.4979&lng=19.0402", false);
+        request.send(null);
+        let twilight = request.responseText;
+        twilight = JSON.parse(twilight);
+        let sunset = twilight.results.sunset;
+        document.getElementById('twilight').innerText = "A nap ekkor megy le: " + sunset;
     }
 };
 
+let isDark = true;
+
+document.getElementById('btn').addEventListener('click', function() {
+    if (isDark == true) {
+        isDark = false;
+        document.getElementById('body').classList.add('dark');
+    } else {
+        isDark = true;
+        document.getElementById('body').classList.remove('dark');
+    }
+}); 
+
 setInterval(function () {
-    let d = new Date();
+    //Updating features
+
+    const d = new Date();
     document.getElementById('time').innerText = d.toTimeString().split(' ')[0];
+
     //Assuming that you work from 9:00-17:00. Change this to configure
-    const start = new Date(new Date(d).setHours(9,0,0));
-    const end = new Date(new Date(d).setHours(17,0,0));
+    const end = new Date(d);
+    end.setHours(17,0,0);
+
     let remaining = Math.floor((end.getTime() - d.getTime()) / 1000);
 
     document.getElementById('remaining').innerHTML = "A munkaidőből még ennyi idő van hátra: <b>" + remaining + "</b> másodperc";
